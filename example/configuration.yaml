@@ -1,0 +1,43 @@
+Logging:
+  level: INFO
+  debug_file_logging: True
+  logging_folder: example/Logs
+
+Database:
+  dialect: sqlite
+  driver:
+  username:
+  password:
+  host:
+  port:
+  name: example/crawl.db
+
+Downloader:
+  user-agent: MyCrawler | https://path-to-website-with-crawler-information.com/
+  max_downloader_threads: 1 # Download threads to run simultaneaously.
+  crawls_per_second: 5 #Maximum downloads per second.
+
+Parser:
+  max_parser_processes: 4 #Parsing processes to run simultaneaously.
+  General:
+    traindata: example/traindata/traindata.csv #Path to your train data.
+    stopword_path: example/stopwords #Path to your stopword file
+    threshold: -0.5 #Threshold -1 to 1 to define how many relevant sentences a document needs to have to be considered releevant.
+    search_depth: 3 #Number of child pages to download after the last relevant document.
+  TextProcessing:
+    language: german #Supported languages in : nltk.stem.SnowballStemmer.languages
+    boilerplate_extractor: LargestContentExtractor #See https://github.com/misja/python-boilerpipe
+    vectorizer: count #Can be count or tfidf
+    ngramrange: [1,2]
+    custom_regualar_expressions:
+      - ['/innen|\*innen|/-innen', 'innen'] #unifies different gender-formats.
+      - ['-\s*\n', ''] #removes hyphenation.
+      - ['(?:[\t ]*(?:\r?\n|\r)+)', ' '] #removes linebreaks.
+  SVM: #See http://scikit-learn.org/stable/modules/generated/sklearn.svm.OneClassSVM.html#sklearn.svm.OneClassSVM
+    feature_percentage: 0.8
+    kernel: sigmoid
+    nu: 0.05
+    gamma: 0.1
+    coef0: -1
+    degree: 3
+    cache_size: 1000 #MB memory
